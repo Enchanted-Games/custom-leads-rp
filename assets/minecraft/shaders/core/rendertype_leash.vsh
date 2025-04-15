@@ -32,7 +32,7 @@ void main() {
     isLeash = (rougheq(Color.rgb, vec3(0.498039, 0.4, 0.298039)) || rougheq(Color.rgb, vec3(0.34902, 0.278431, 0.207843))) ? 1 : 0;
     if(isLeash <= 0) return;
 
-    bool otherHalf = mod(gl_VertexID, 100.0) > 50.0;
+    bool otherHalf = mod(gl_VertexID, 100.0) > 49.0;
     texCoord = vec2(0.0);
     // calculate horizontal texture coordinates
     texCoord.x = mod(gl_VertexID / 2, 25) / 25.0;
