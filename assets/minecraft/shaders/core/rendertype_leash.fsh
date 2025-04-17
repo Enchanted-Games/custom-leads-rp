@@ -18,14 +18,14 @@ ivec2 pixelateUV(vec2 uv, vec2 resolution) {
 }
 
 void main() {
-    if(isLeash <= 0) {
+    if(isLeash == 0) {
         fragColor = linear_fog(vertexColor * adjustments, vertexDistance, FogStart, FogEnd, FogColor);
         return;
     }
 
     vec2 uv = fract(texCoord * vec2(REPEAT_X, REPEAT_Y));
     ivec2 integerUV = pixelateUV(uv, vec2(TEXTURE_WIDTH, TEXTURE_HEIGHT));
-    int bitmapIndex =  integerUV.x + (TEXTURE_WIDTH * integerUV.y);
+    int bitmapIndex = clamp(integerUV.x + (TEXTURE_WIDTH * integerUV.y), 0, BITMAP.length());
 
     vec4 color = PALETTE[BITMAP[bitmapIndex]] * adjustments;
 

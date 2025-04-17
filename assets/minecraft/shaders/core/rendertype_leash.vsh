@@ -5,6 +5,9 @@
 #moj_import <minecraft:projection.glsl>
 #moj_import <eg_custom_leash:leash_texture.glsl>
 
+#define VANILLA_LEASH_COLOUR_1 vec3(0.498039, 0.4, 0.298039)
+#define VANILLA_LEASH_COLOUR_2 vec3(0.34902, 0.278431, 0.207843)
+
 in vec3 Position;
 in vec4 Color;
 in ivec2 UV2;
@@ -29,7 +32,17 @@ void main() {
     vertexColor = Color;
     adjustments = ColorModulator * texelFetch(Sampler2, UV2 / 16, 0);
 
-    isLeash = (rougheq(Color.rgb, vec3(0.498039, 0.4, 0.298039)) || rougheq(Color.rgb, vec3(0.34902, 0.278431, 0.207843))) ? 1 : 0;
+    if(USE_SIMPLE_COLOURS) {
+        isLeash = 0;
+        if(rougheq(Color.rgb, VANILLA_LEASH_COLOUR_1)) {
+            vertexColor.rgb = COLOUR_1;
+        } else if(rougheq(Color.rgb, VANILLA_LEASH_COLOUR_2)) {
+            vertexColor.rgb = COLOUR_2;
+        }
+        return;
+    }
+
+    isLeash = (rougheq(Color.rgb, VANILLA_LEASH_COLOUR_1) || rougheq(Color.rgb, VANILLA_LEASH_COLOUR_2)) ? 1 : 0;
     if(isLeash <= 0) return;
 
     bool otherHalf = mod(gl_VertexID, 100.0) > 49.0;
