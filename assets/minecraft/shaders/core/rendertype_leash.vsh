@@ -18,7 +18,9 @@ out float vertexDistance;
 flat out vec4 vertexColor;
 
 out vec4 adjustments;
-out vec2 texCoord;
+#if USE_SIMPLE_COLOURS == 0
+    out vec2 texCoord;
+#endif
 flat out int isLeash;
 
 bool rougheq(vec3 color, vec3 target) {
@@ -31,28 +33,27 @@ void main() {
     vertexDistance = fog_distance(Position, FogShape);
     vertexColor = Color;
     adjustments = ColorModulator * texelFetch(Sampler2, UV2 / 16, 0);
+    isLeash = 0;
 
-    if(USE_SIMPLE_COLOURS) {
-        isLeash = 0;
+    #if USE_SIMPLE_COLOURS == 1
         if(rougheq(Color.rgb, VANILLA_LEASH_COLOUR_1)) {
             vertexColor.rgb = COLOUR_1;
         } else if(rougheq(Color.rgb, VANILLA_LEASH_COLOUR_2)) {
             vertexColor.rgb = COLOUR_2;
         }
-        return;
-    }
+    #else
+        isLeash = (rougheq(Color.rgb, VANILLA_LEASH_COLOUR_1) || rougheq(Color.rgb, VANILLA_LEASH_COLOUR_2)) ? 1 : 0;
+        if(isLeash <= 0) return;
 
-    isLeash = (rougheq(Color.rgb, VANILLA_LEASH_COLOUR_1) || rougheq(Color.rgb, VANILLA_LEASH_COLOUR_2)) ? 1 : 0;
-    if(isLeash <= 0) return;
-
-    bool otherHalf = mod(gl_VertexID, 100.0) > 49.0;
-    texCoord = vec2(0.0);
-    // calculate horizontal texture coordinates
-    texCoord.x = mod(gl_VertexID / 2, 25) / 25.0;
-    if(otherHalf && !MIRROR_ONE_HALF) {
-        // offset and inverse the x for the other half of the lead
-        texCoord.x = 1 - (texCoord.x + (2.0/50.0));
-    }
-    // calculate vertical texture coordinates
-    texCoord.y = mod(gl_VertexID + (otherHalf ? 1 : 0), 2);
+        bool otherHalf = mod(gl_VertexID, 100.0) > 49.0;
+        // calculate horizontal texture coordinates
+        texCoord = vec2(0.0);
+        texCoord.x = mod(gl_VertexID / 2, 25) / 25.0;
+        if(otherHalf && MIRROR_ONE_HALF == 1) {
+            // offset and inverse the x for the other half of the lead
+            texCoord.x = 1 - (texCoord.x + (2.0/50.0));
+        }
+        // calculate vertical texture coordinates
+        texCoord.y = mod(gl_VertexID + (otherHalf ? 1 : 0), 2);
+    #endif
 }

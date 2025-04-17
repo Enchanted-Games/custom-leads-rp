@@ -22,8 +22,8 @@ vec4 PALETTE[] = vec4[] (
 #define REPEAT_X 1
 #define REPEAT_Y 1
 
-#define MIRROR_ONE_HALF false
+#define MIRROR_ONE_HALF 1
 
+#define USE_SIMPLE_COLOURS 0
 #define COLOUR_1 vec3(0.498039, 0.4, 0.298039)
-#define COLOUR_2 vec3(0.34902, 0.278431, 0.207843)
-#define USE_SIMPLE_COLOURS true
+#define COLOUR_2 vec3(0.34902, 1, 0.207843)
