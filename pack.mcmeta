@@ -1,6 +1,15 @@
 {
   "pack": {
-    "pack_format": 57,
-    "description": "Test pack"
+    "supported_formats": [42, 57],
+    "pack_format": 42,
+    "description": "Gives leads a custom texture"
+  },
+  "overlays": {
+    "entries": [
+      {
+        "directory": "1_21_5_below_compat",
+        "formats": [42, 55]
+      }
+    ]
   }
 }
