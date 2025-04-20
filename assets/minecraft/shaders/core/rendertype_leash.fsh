@@ -32,6 +32,10 @@ void main() {
 
         vec4 color = PALETTE[BITMAP[bitmapIndex]] * adjustments;
 
+        if(color.a < 0.1) {
+          discard;
+        }
+
         fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);
     #endif
 }
