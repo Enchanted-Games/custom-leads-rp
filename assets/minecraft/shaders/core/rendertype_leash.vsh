@@ -49,7 +49,7 @@ void main() {
         // calculate horizontal texture coordinates
         texCoord = vec2(0.0);
         texCoord.x = mod(gl_VertexID / 2, 25) / 25.0;
-        if(otherHalf && MIRROR_ONE_HALF == 1) {
+        if(otherHalf && MIRROR_ONE_HALF == 0) {
             // offset and inverse the x for the other half of the lead
             texCoord.x = 1 - (texCoord.x + (2.0/50.0));
         }
